@@ -1,3 +1,6 @@
+// IMPORTS
+import {getHoteleByID, getHoteles, postHotel} from './requests/hotelRequest.js'
+import {getReservas, postReserva, getReservaByName} from './requests/reservaRequest.js'
 
 const DateTime = luxon.DateTime
 
@@ -42,9 +45,11 @@ const crearReservaCard = (reserva) => {
 
 
 
-inputNombre.addEventListener('keyup', (e) => {
+inputNombre.addEventListener('keyup', async(e) => {
     
-    let reservas = JSON.parse(localStorage.getItem('reservas'))
+    // let reservas = JSON.parse(localStorage.getItem('reservas'))
+
+    let reservas = await getReservas()
     listaReservas.innerHTML= ``
     let nombrePersona = e.target.value
     let reservaDOM= '';
@@ -75,7 +80,7 @@ inputNombre.addEventListener('keyup', (e) => {
                 reservaDOM+= crearReservaCard(reservaE)
                
             })
-            console.table(reservasEncontradas)
+            // console.table(reservasEncontradas)
             listaReservas.innerHTML= reservaDOM 
         }else{
             reservaDOM = `<p class="mx-auto"> No existen reservas para ${nombrePersona}</p>`

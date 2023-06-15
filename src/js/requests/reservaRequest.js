@@ -4,7 +4,8 @@ export async function getReservas(){
     try {
         const response =  await fetch(`https://648120a229fa1c5c5031239e.mockapi.io/api/v1/reservas`)
         const  reservas =  await response.json()
-        console.log(reservas)
+        // console.log(reservas)
+        return reservas
     } catch (error) {
         console.log(error)
     }
@@ -12,11 +13,15 @@ export async function getReservas(){
 
 export async function getReservaByName(reserva){
 
-    let {nombrePersona} =  reserva
-    const response =  await fetch(`https://648120a229fa1c5c5031239e.mockapi.io/api/v1/reservas/${nombrePersona}`)
-    const reservas  = await response.json()
-
-    console.log(reservas)
+    try {
+        let {nombrePersona} =  reserva
+        const response =  await fetch(`https://648120a229fa1c5c5031239e.mockapi.io/api/v1/reservas/${nombrePersona}`)
+        const reservas  = await response.json()
+        console.log(reservas)
+        return reservas
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 
