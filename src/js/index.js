@@ -1,7 +1,8 @@
 // IMPORTS
 
 import dbPersonas from "./dbPersonas.js"
-
+import {getHoteleByID, getHoteles, postHotel} from './requests/hotelRequest.js'
+import {getReservas, postReserva} from './requests/reservaRequest.js'
 // LUXON PARA MANEJO DE FECHAS
 const DateTime = luxon.DateTime
 
@@ -49,84 +50,86 @@ const edadPersonaInput = document.getElementById('edadPersona')
 // NARA
 // - Nara Royal Hotel = 41.403
 // - Hotel Nikko Nara = 60.772
-const hoteles = [
-    {
-        id: 1,
-        nombre: "Tokyo",
-        hoteles: [
-            {
-                id: 10,
-                nombre: "Sotetsu Fresa Inn Ginza-Nanachome",
-                precio: 85294,
-                descripcion: "Buen hotel inmerso en Ginza"
-            },
-            {
-                id: 20,
-                nombre: "The Square Hotel GINZA",
-                precio: 117280,
-                descripcion: "Hotel de lujo en medio de Ginza"
-            },
-        ]    
-    },
-    {
-        id: 2,
-        nombre: "Kyoto",
-        hoteles: [
-            {
-                id: 30,
-                nombre: "Hotel Resol Kyoto Kawaramachi Sanjo",
-                precio: 90459,
-                descripcion: "Hotel estilo antiguo con toques modernos"
-            },
-            {
-                id: 40,
-                nombre: "Hotel Resol Trinity Kyoto",
-                precio: 102412,
-                descripcion: "Hotel más moderno de Kyoto"
-            },
-        ],
-    },
-    {   
-        id: 3,
-        nombre: "Osaka", 
-        hoteles: [
-            {
-                id: 50,
-                nombre: "Sotetsu Fresa Inn Osaka Namba",
-                precio: 65748,
-                descripcion: "Hotel al más puro estilo Edo"
-            },
-            {
-                id: 60,
-                nombre: "Nest Hotel Osaka Umeda",
-                precio: 58569,
-                descripcion: "Inmerso en el centro de la ciduad de Osaka"
-            }
-        ],
-    },
-    {
-        id: 4,
-        nombre: "Nara",
-        hoteles: [
-            {
-                id: 70,
-                nombre: "Nara Royal Hotel",
-                precio: 41403,
-                descripcion: ""
-            },
-            {
-                id: 80,
-                nombre: "Hotel Nikko Nara",
-                precio: 60772,
-                descripcion: ""
-            }
-        ],
-    }
-]
+// const hoteles = [
+//     {
+        
+//         nombre: "Tokyo",
+//         hoteles: [
+//             {
+//                 id: 10,
+//                 nombre: "Sotetsu Fresa Inn Ginza-Nanachome",
+//                 precio: 85294,
+//                 descripcion: "Buen hotel inmerso en Ginza"
+//             },
+//             {
+//                 id: 20,
+//                 nombre: "The Square Hotel GINZA",
+//                 precio: 117280,
+//                 descripcion: "Hotel de lujo en medio de Ginza"
+//             },
+//         ]    
+//     },
+//     {
+       
+//         nombre: "Kyoto",
+//         hoteles: [
+//             {
+//                 id: 30,
+//                 nombre: "Hotel Resol Kyoto Kawaramachi Sanjo",
+//                 precio: 90459,
+//                 descripcion: "Hotel estilo antiguo con toques modernos"
+//             },
+//             {
+//                 id: 40,
+//                 nombre: "Hotel Resol Trinity Kyoto",
+//                 precio: 102412,
+//                 descripcion: "Hotel más moderno de Kyoto"
+//             },
+//         ],
+//     },
+//     {   
+       
+//         nombre: "Osaka", 
+//         hoteles: [
+//             {
+//                 id: 50,
+//                 nombre: "Sotetsu Fresa Inn Osaka Namba",
+//                 precio: 65748,
+//                 descripcion: "Hotel al más puro estilo Edo"
+//             },
+//             {
+//                 id: 60,
+//                 nombre: "Nest Hotel Osaka Umeda",
+//                 precio: 58569,
+//                 descripcion: "Inmerso en el centro de la ciduad de Osaka"
+//             }
+//         ],
+//     },
+//     {
+        
+//         nombre: "Nara",
+//         hoteles: [
+//             {
+//                 id: 70,
+//                 nombre: "Nara Royal Hotel",
+//                 precio: 41403,
+//                 descripcion: ""
+//             },
+//             {
+//                 id: 80,
+//                 nombre: "Hotel Nikko Nara",
+//                 precio: 60772,
+//                 descripcion: ""
+//             }
+//         ],
+//     }
+// ]
+
+
+
 
 const dbReservas = [
     {
-        id: "b4gkn6isr4i",
         ciudad: "Tokyo",
         hotel: "Sotetsu Fresa Inn Ginza-Nanachome",
         cantPersonas: 2,
@@ -136,7 +139,6 @@ const dbReservas = [
         fechaSalida:(new Date("December 30, 2023 14:00:00")).toLocaleString()
     },
     {
-        id: "0o6nbin4af0r",
         ciudad: "Osaka",
         hotel: "Nest Hotel Osaka Umeda",
         cantPersonas: 4,
@@ -157,14 +159,18 @@ const dbReservas = [
 //     }
 // ]
 
+
+// getReservas()
+
+
 function generarID(){ 
     return Math.random().toString(30).substring(2);           
 } 
 
 
 class Reserva{
-    constructor(id, ciudad, hotel, cantPersonas, precio, nombrePersona, fechaEntrada, fechaSalida){
-        this.id = id;
+    constructor(ciudad, hotel, cantPersonas, precio, nombrePersona, fechaEntrada, fechaSalida){
+        this.idReserva = crypto.randomUUID() ;
         this.ciudad = ciudad;
         this.hotel = hotel;
         this.cantPersonas = cantPersonas;
@@ -173,11 +179,12 @@ class Reserva{
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;
     }
+    
 }
 
 class Persona{
-    constructor(id, nombre, edad, rut){
-        this.id = id;   
+    constructor(nombre, edad, rut){
+        this.id = crypto.randomUUID();   
         this.nombre = nombre;
         this.edad = edad;
         this.rut = rut;
@@ -186,20 +193,22 @@ class Persona{
 }
 
 
+
 // Arrays de objetos
 const reservas = []
 const personas = []
 
+
 // Ingresar objetos de Reserva dentro del array para poblar con datos de prueba
 dbReservas.map((dbReserva) => {
-    let reserva = new Reserva(dbReserva.id, dbReserva.ciudad, dbReserva.hotel, dbReserva.cantPersonas, dbReserva.precio, dbReserva.nombrePersona, dbReserva.fechaEntrada, dbReserva.fechaSalida)
+    let reserva = new Reserva(dbReserva.ciudad, dbReserva.hotel, dbReserva.cantPersonas, dbReserva.precio, dbReserva.nombrePersona, dbReserva.fechaEntrada, dbReserva.fechaSalida)
     
     reservas.push(reserva)
 })
 
 // Ingresar objetos de Persona dentro del array para poblar con datos de prueba
 dbPersonas.map(dbPersona => {
-    let persona = new Persona(dbPersona.id, dbPersona.nombre, dbPersona.edad, dbPersona.rut)
+    let persona = new Persona(dbPersona.nombre, dbPersona.edad, dbPersona.rut)
     personas.push(persona)
 })
 
@@ -220,14 +229,14 @@ function crearPersona(){
     let rutPersona = rutPersonaInput.value
     let nombrePersona = nombrePersonaInput.value
     
-    let cantidadPersonasInscritas = personas.length
-    let id = cantidadPersonasInscritas + 1
+    // let cantidadPersonasInscritas = personas.length
+    // let id = cantidadPersonasInscritas + 1
     let persona = buscarPersona(rutPersona)
 
     let personasLocal = JSON.parse(localStorage.getItem('personas'))
 
     if(!persona){
-        persona = new Persona(id, nombrePersona, edadPersona, rutPersona)
+        persona = new Persona(nombrePersona, edadPersona, rutPersona)
         personasLocal.push(persona)
         localStorage.setItem('personas', JSON.stringify(personasLocal))
     }
@@ -244,20 +253,20 @@ function buscarReserva(id){
     return reservaEncontrada
 }
 
-function crearReserva(idHotel, rutPersona, cantidadPersonas, fechaIngreso, fechaSalida ){
+async function crearReserva(idHotel, rutPersona, cantidadPersonas, fechaIngreso, fechaSalida ){
 
     let personaCreada =  crearPersona()
-    let hotelCiudad = buscarHotel(idHotel)
+    let hotelCiudad = await buscarHotel(idHotel)
 
     let {ciudad, hotel} = hotelCiudad
     // id, ciudad, hotel, cantPersonas, precio, nombrePersona, fechaEntrada, fechaSalida
-    let idReserva = generarID()
-    let repetir = buscarReserva(idReserva)
+    // let idReserva = generarID()
+    // let repetir = buscarReserva(idReserva)
  
-    while(repetir){
-        repetir = buscarReserva(idReserva)
-        idReserva = generarID()
-    }
+    // while(repetir){
+    //     repetir = buscarReserva(idReserva)
+    //     idReserva = generarID()
+    // }
     let reservasLocal = JSON.parse(localStorage.getItem('reservas'))
 
     let fechaIngresoFinal = DateTime.fromISO(fechaIngreso)
@@ -266,12 +275,16 @@ function crearReserva(idHotel, rutPersona, cantidadPersonas, fechaIngreso, fecha
     
     let precioFinal = calcularValorReserva(hotel.precio, cantidadDias)
 
-    let reserva = new Reserva(idReserva, ciudad.nombreCiudad, hotel.nombre, parseInt(cantidadPersonas), precioFinal, personaCreada.nombre, fechaIngreso, fechaSalida)
+    let reserva = new Reserva(ciudad.nombreCiudad, hotel.nombre, parseInt(cantidadPersonas), precioFinal, personaCreada.nombre, fechaIngreso, fechaSalida)
+    console.log(reserva)
     reservasLocal.push(reserva)
     localStorage.setItem('reservas', JSON.stringify(reservasLocal))
 
+    // Guardar reserva en mockapi
+    postReserva(reserva)
+
     Toastify({
-        text: `Resserva con id ${idReserva} creada correctamente`,
+        text: `Reserva con id ${reserva.idReserva} creada correctamente`,
         duration: 3000,
         close: false,
         gravity: "top", 
@@ -296,9 +309,9 @@ function buscarPersona(rut){
 }
 
 
-function buscarHotel(idBusca){
+async function buscarHotel(idBusca){
     let hotelCiudad = {}
-
+    let  hoteles =  await getHoteles()
     for (const ciudad of hoteles) {
         let hotelE = ciudad.hoteles.find( (hotel) => {
             return parseInt(hotel.id) == parseInt(idBusca)
@@ -319,13 +332,13 @@ const $ = (selector) => document.querySelector(selector)
 
 
 // Función para ejecutar dentro del evento de los botones dinámicos
-function handleModalClick(e){
+async function handleModalClick(e){
     const target = e.target
     if(target.tagName === 'BUTTON' && target.classList.contains('modalButton') ){
         defaultModal.classList.toggle('hidden')
        
         let id = e.target.attributes[0].value
-        let hotel = buscarHotel(id)
+        let hotel = await buscarHotel(id)
 
         nombreHotelForm.innerHTML = `<span class="hidden">${id}</span><p>${hotel?.hotel?.nombre}, ${hotel?.ciudad?.nombreCiudad}</p>`
         descripcionForm.innerHTML= `
@@ -338,8 +351,7 @@ function handleModalClick(e){
 }
 
 // Crear botón que abrirá el modal de cada uno de los hoteles
-const toggleModalButton = (idHotel) => {
-    
+const toggleModalButton =  (idHotel) => {
     return (
     `<button id=${idHotel}    
     data-modal-target="defaultModal" data-modal-toggle="defaultModal" 
@@ -355,7 +367,7 @@ const toggleModalButton = (idHotel) => {
 
 $("#lista-hoteles").addEventListener('click', handleModalClick, true)
 
-const crearHotelCard = (hotel, ciudad) => {
+const crearHotelCard =  (hotel, ciudad) => {
     let {id: idHotel, nombre: nombreHotel, precio: precioHotel, descripcion} = hotel;
     let {id: idCiudad, nombre: nombreCiudad} = ciudad;    
     
@@ -376,9 +388,10 @@ const crearHotelCard = (hotel, ciudad) => {
     return hotelCard;
 }
 
-function listarHoteles(){
+async function listarHoteles(){
     let hotelesDOM = ``
-    hoteles.map((ciudad) => {
+    let hoteles = await getHoteles()
+    hoteles.map( (ciudad) => {
         ciudad.hoteles.forEach(hotel => {
             hotelesDOM += crearHotelCard(hotel, ciudad)
         })    
@@ -411,10 +424,10 @@ fechaIngresoInput.addEventListener('change', (e)  => {
 
 // EVENTO FORMULARIO PARA CREAR RESERVA
 
-formReserva.addEventListener('change', (e) => {
+formReserva.addEventListener('change', async (e) => {
 
     let idHotel = parseInt(nombreHotelForm.firstChild.textContent)
-    let { hotel } = buscarHotel(idHotel)
+    let { hotel } = await buscarHotel(idHotel)
 
     if(fechaIngresoInput.value != '' && fechaSalidaInput.value != ''){
         let fechaIngresoFinal = DateTime.fromISO(fechaIngresoInput.value)
@@ -442,14 +455,14 @@ formReserva.addEventListener('submit', (e) => {
         cancelButtonColor: '#c56a57',
         confirmButtonText: 'Si, reservar!',
 
-      }).then((result) => {
+      }).then( async (result) => {
         if (result.isConfirmed) {
             if(rutPersonaInput.value != '' && nombrePersonaInput.value != '' && cantidadPersonasInput.value !=  '' &&  fechaIngresoInput.value  !=  '' && fechaSalidaInput.value  != '' ){
-                let  reserva = crearReserva(idHotel, rutPersonaInput.value, cantidadPersonasInput.value , fechaIngresoInput.value , fechaSalidaInput.value  )
+                let  reserva = await crearReserva(idHotel, rutPersonaInput.value, cantidadPersonasInput.value , fechaIngresoInput.value , fechaSalidaInput.value  )
                 Swal.fire(
                     `Reserva creada exitosamente`,
                     `Tu reserva fue realizada exitosamente para la fecha ${fechaFormateada}.
-                    El ID de tu reserva es el siguiente: ${reserva.id}
+                    El ID de tu reserva es el siguiente: ${reserva.idReserva}
                     `,
                     'success'
                 )
@@ -464,8 +477,8 @@ formReserva.addEventListener('submit', (e) => {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    listaHoteles.innerHTML = listarHoteles()
+document.addEventListener('DOMContentLoaded', async () => {
+    listaHoteles.innerHTML =  await listarHoteles()
     let fechaActual = DateTime.local().toFormat('yyyy-MM-dd\'T\'HH:mm');
     fechaIngresoInput.min = fechaActual
     fechaIngresoInput.max = DateTime.local().plus({years: 10}).toFormat('yyyy-MM-dd\'T\'HH:mm');
