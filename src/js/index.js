@@ -391,6 +391,7 @@ const crearHotelCard =  (hotel, ciudad) => {
 async function listarHoteles(){
     let hotelesDOM = ``
     let hoteles = await getHoteles()
+
     hoteles.map( (ciudad) => {
         ciudad.hoteles.forEach(hotel => {
             hotelesDOM += crearHotelCard(hotel, ciudad)
@@ -478,7 +479,10 @@ formReserva.addEventListener('submit', (e) => {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    listaHoteles.innerHTML =  await listarHoteles()
+    let listadoHoteles =  await listarHoteles()
+    
+    listaHoteles.innerHTML =  listadoHoteles
+
     let fechaActual = DateTime.local().toFormat('yyyy-MM-dd\'T\'HH:mm');
     fechaIngresoInput.min = fechaActual
     fechaIngresoInput.max = DateTime.local().plus({years: 10}).toFormat('yyyy-MM-dd\'T\'HH:mm');
