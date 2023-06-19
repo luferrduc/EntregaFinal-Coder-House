@@ -5,7 +5,7 @@ export async function getHoteles(){
     try {
         const response =  await fetch(`https://648120a229fa1c5c5031239e.mockapi.io/api/v1/hoteles`)
         const  hoteles =  await response.json()
-        // console.log(hoteles)
+  
         return hoteles
     } catch (error) {
         console.log(error)

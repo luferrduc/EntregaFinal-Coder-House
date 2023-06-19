@@ -149,20 +149,6 @@ const dbReservas = [
     }
 ]
 
-// const dbPersonas = [
-//     {
-//         id: 1,
-//         rut: "18621142-1",
-//         nombre: "Luciano Ferrando",
-//         email: "luciano.ferrando94@gmail.com",
-//         edad: 29
-//     }
-// ]
-
-
-// getReservas()
-
-
 function generarID(){ 
     return Math.random().toString(30).substring(2);           
 } 
@@ -259,14 +245,7 @@ async function crearReserva(idHotel, rutPersona, cantidadPersonas, fechaIngreso,
     let hotelCiudad = await buscarHotel(idHotel)
 
     let {ciudad, hotel} = hotelCiudad
-    // id, ciudad, hotel, cantPersonas, precio, nombrePersona, fechaEntrada, fechaSalida
-    // let idReserva = generarID()
-    // let repetir = buscarReserva(idReserva)
- 
-    // while(repetir){
-    //     repetir = buscarReserva(idReserva)
-    //     idReserva = generarID()
-    // }
+
     let reservasLocal = JSON.parse(localStorage.getItem('reservas'))
 
     let fechaIngresoFinal = DateTime.fromISO(fechaIngreso)
