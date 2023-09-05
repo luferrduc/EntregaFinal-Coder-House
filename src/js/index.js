@@ -474,11 +474,12 @@ toggleMenu.addEventListener('click', (e) => {
    
 })
 
-inputCiudad.addEventListener('keyup', (e) => {
+inputCiudad.addEventListener('input', async (e) => {
+   
     listaHoteles.innerHTML= ``
     let nombreCiudad = e.target.value
     let hotelDOM = ``
-
+    let hoteles = await getHoteles()
     if(nombreCiudad != ''){
         console.log(nombreCiudad)
         let hotelesEncontrados = hoteles.filter((ciudad) => {
@@ -506,7 +507,7 @@ inputCiudad.addEventListener('keyup', (e) => {
     }else{
         listaHoteles.classList.remove('hidden')
         ciudadesNoEncontradas.classList.add('hidden')
-        hotelDOM = listarHoteles()
+        hotelDOM = await listarHoteles()
         listaHoteles.innerHTML = hotelDOM
     }
 
